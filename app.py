@@ -10,6 +10,7 @@ HOST = config_file['ENDPOINTS']['host']
 USER_ENDPOINT = config_file['ENDPOINTS']['user']
 AUTH_ENDPOINT = config_file['ENDPOINTS']['auth_user']
 PORTFOLIO_ENDPOINT = config_file['ENDPOINTS']['portfolios']
+OPEN_OPERATION = config_file['ENDPOINTS']['open_operations']
 
 DEBUG = config_file['ENV']['debug']
 
@@ -99,7 +100,19 @@ def sign_up():
 
 @app.route('/add_stocks', methods=['POST',])
 def add_stocks():
-    pass
+    stock = str(request.form['stock'].upper())
+    price = float(request.form['price'].replace(',','.'))
+    quantity = int(request.form['quantity'])
+    date = (request.form['date'].replace('/', '-'))
+    portfolio = str(request.form['portfolio'])
+    r_url = f"http://{HOST}{OPEN_OPERATION}?user_id={session['user_id']}&stock={stock}&price={price}&quantity={quantity}&date={date}&portfolio={portfolio} "
+    r = requests.post(r_url).json()
+    if r['Code'] == 200:
+        flash(f'Ação adicionada com sucesso.', 'success')
+        return redirect(url_for('index'))
+    else:
+        flash(f"{r['Message']}.", 'danger')
+        return redirect(url_for('index'))
 
 
 if __name__ == '__main__':

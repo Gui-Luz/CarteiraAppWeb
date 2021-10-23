@@ -10,33 +10,32 @@
     </div>
   </div>
 </div>
+<!-- Modal -->
 <div class="modal-dialog">
-    <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header bg-light">
-        <h5 class="modal-title" id="exampleModalLabel">Adicionar ações</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-          <div class="card mb-2">
-              <div class="card-body">
-                <form method="POST" action="{{ url_for('add_stocks') }}">
-                    <h5 class="card-title">Editar</h5>
-                    <p class="m-0"><label class="gerenciar-label">sigla</label> <input class="form-control form-control-sm" type="text" name="sigla" required></p>
-                    <p class="m-0"><label class="gerenciar-label">quantidade</label> <input class="form-control form-control-sm" type="text" name="quantidade" required></p>
-                    <p class="m-0"><label class="gerenciar-label">preço da compra</label> <input class="form-control form-control-sm" type="text" name="preco" required></p>
-                    <p class="m-0"><label class="gerenciar-label">data da compra</label> <input class="form-control form-control-sm" type="text" name="data" required></p>
-                    <p class="m-0 mb-3"><label class="gerenciar-label">carteira</label> <input class="form-control form-control-sm" type="text" name="carteira" required></p>
-                </form>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-light">
+            <h5 class="modal-title" id="exampleModalLabel">Adicionar ações</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <div class="card mb-2">
+                  <div class="card-body">
+                    <form method="POST" action="{{ url_for('add_stocks') }}">
+                        <h5 class="card-title">Editar</h5>
+                        <p class="m-0"><label class="gerenciar-label">sigla</label> <input class="form-control form-control-sm" type="text" name="stock" required></p>
+                        <p class="m-0"><label class="gerenciar-label">quantidade</label> <input class="form-control form-control-sm" type="text" name="quantity" required></p>
+                        <p class="m-0"><label class="gerenciar-label">preço da compra</label> <input class="form-control form-control-sm" type="text" name="price" required></p>
+                        <p class="m-0"><label class="gerenciar-label">data da compra</label> <input class="form-control form-control-sm" type="text" name="date" required></p>
+                        <p class="m-0 mb-3"><label class="gerenciar-label">carteira</label> <input class="form-control form-control-sm" type="text" name="portfolio" required></p>
+                        <button type="submit" class="btn btn-primary">Adicionar</button>
+                    </form>
+                  </div>
               </div>
           </div>
-      </div>
-      <div class="modal-footer bg-light">
-        <button type="button" class="btn btn-primary">Adicionar</button>
+        </div>
       </div>
     </div>
-  </div>
 </div>
 {% endblock %}
