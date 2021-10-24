@@ -122,6 +122,24 @@ def add_stocks():
         return redirect(url_for('index'))
 
 
+@app.route('/sell_stocks', methods=['POST',])
+def sell_stocks():
+    stock = request.args['stock']
+    portfolio = request.args['portfolio']
+    price = float(request.form['price'].replace(',', '.'))
+    date = (request.form['date'].replace('/', '-'))
+    quantity = int(request.form['quantity'])
+
+    r_url = f"http://{HOST}{OPEN_OPERATION}?user_id={session['user_id']}&stock={stock}&sold_price={price}&quantity={quantity}&sold_date={date}&portfolio={portfolio} "
+    r = requests.delete(r_url).json()
+    if r['Code'] == 200:
+        flash(f'Ação vendida com sucesso.', 'success')
+        return redirect(url_for('index'))
+    else:
+        flash(f"{r['Message']}.", 'danger')
+        return redirect(url_for('index'))
+
+
 if __name__ == '__main__':
     app.run(debug=bool(DEBUG), port=8000)
 
