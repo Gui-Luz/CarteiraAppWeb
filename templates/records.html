@@ -15,7 +15,7 @@
                 <div class = "container-fluid">
                     <nav>
                       <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                          {% for key in open_stocks_dict %}
+                          {% for key in stocks %}
                           {% set key_formated = key.replace(' ','') %}
                           {% if loop.index == 1 %}
                         <a class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" href="#{{ key_formated }}" role="tab" aria-controls="nav-home" aria-selected="false">{{ key }}</a>
