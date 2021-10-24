@@ -2,17 +2,20 @@
 <div class="container-fluid m-0 p-0">
     <div class="row">
         <div class="col-md-12 col-lg-9">
-            <div class="row" style="height:39px">
-              <div class="container-fluid bg-secondary text-white p-1">
-                  <span><i class="bi bi-graph-up ms-2"></i></span>
+            <div class="row">
+              <div class="container-fluid bg-secondary text-white">
+                  <span><i class="bi bi-graph-up"></i></span>
                   <span>Ações</span>
+                  <span class="badge bg-secondary position-relative end-0">
+                      <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#ModalAddStock"><i class="bi bi-plus-circle-dotted"></i></button>
+                  </span>
               </div>
             </div>
             <div class="row">
                 <div class = "container-fluid">
                     <nav>
                       <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                          {% for key in stocks %}
+                          {% for key in open_stocks_dict %}
                           {% set key_formated = key.replace(' ','') %}
                           {% if loop.index == 1 %}
                         <a class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" href="#{{ key_formated }}" role="tab" aria-controls="nav-home" aria-selected="false">{{ key }}</a>
@@ -41,11 +44,8 @@
                                         <th class="text-center">Preço de compra</th>
                                         <th class="text-center">Data de venda</th>
                                         <th class="text-center">Preço de venda</th>
-                                        {% if totals[key] >= 0 %}
-                                        <th class="text-center d-block">Resultado <span class="badge bg-success d-block">{{ totals[key] }}</span> </th>
-                                        {% else %}
-                                        <th class="text-center">Resultado <span class="badge bg-danger">{{ totals[key] }}</span> </th>
-                                        {% endif %}
+                                        <th class="text-center">Resultado</th>
+                                        <th class="text-center">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -66,10 +66,11 @@
                                         <td class="text-center align-middle"> {{ row['Sold date'] }}</td>
                                         <td class="text-center align-middle"> {{ row['Sold price'] }}</td>
                                         {% if row['Result'] >= 0 %}
-                                            <td class="text-center align-middle text-success"> {{ row['Result'] | round(precision=2) }}</td>
+                                            <td class="text-center align-middle text-success"> {{ row['Result'] }}</td>
                                         {% else %}
-                                            <td class="text-center align-middle text-danger"> {{ row['Result'] | round(precision=2) }}</td>
+                                            <td class="text-center align-middle text-danger"> {{ row['Result'] }}</td>
                                         {% endif %}
+                                        <td class="text-center align-middle"> {{ row['Status'] }}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -81,47 +82,42 @@
             </div>
         </div>
         <div class="col-md-12 col-lg-3">
-            <div class="row" style="height:39px">
-                <div class="container-fluid bg-secondary text-white p-1">
-                    <span><i class="bi bi-gear ms-2"></i></span>
-                    <span>Preferências</span>
+            <div class="row">
+                <div class="container-fluid bg-secondary text-white">
+                    <span><i class="bi bi-wallet"></i></span>
+                    <span>Carteiras</span>
+                    <span class="badge bg-secondary position-relative end-0">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#abrir"><i class="bi bi-plus-circle-dotted"></i></button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#fechar"><i class="bi bi-dash-circle-dotted"></i></button>
                     </span>
                 </div>
             </div>
             <div class ="row">
-                <div class="container p-2 mt-4">
-                    <div class="container p-2 border">
-                            <div class="card">
-                              <div class="card-header">
-                                Conta
-                              </div>
-                                  <ul class="list-group list-group-flush">
-                                        <li class="list-group-item">{{ session['name']}}</li>
-                                        <li class="list-group-item">{{ session['username'] }}</li>
-                                        <li class="list-group-item">{{ session['email'] }}</li>
-                                  </ul>
-                              <div class="card-header">
-                                Gerenciamento
-                              </div>
-                                <div class="form-check form-switch">
-                                  <ul class="list-group list-group-flush">
-                                        <li class="list-group-item">
-                                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-                                            <label class="form-check-label" for="flexSwitchCheckDefault">Enviar relatório mensal por email</label>
-                                        </li>
-                                  </ul>
-                                </div>
-                                <div class="card-header">
-                                Exportar histórico
-                                </div>
-                                <div class="d-flex justify-content-center p-2">
-                                    <button type="button" class="btn btn-outline-info">Exportar</button>
-                                </div>
-                              </div>
-                            </div>
-                        <div class="form-check form-switch">
+                <div class="accordion accordion-flush" id="accordionFlush">
+                    {% for key in portfolio_details %}
+                    {% set key_formated = key.replace(' ','') %}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-headingOne-{{key_formated}} ">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne-{{key_formated}}" aria-expanded="false" aria-controls="flush-collapseOne">
+                            {{ key }}
+                          </button>
+                        </h2>
+                        <div id="flush-collapseOne-{{key_formated}}" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlush">
+                          <div class="accordion-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Quantidade de ações <span class="badge bg-secondary position-absolute end-0 me-2 w-25">{{ portfolio_totals[key]['Quantity'] }} ações</span></li>
+                                <li class="list-group-item">Total investido <span class="badge bg-secondary position-absolute end-0 me-2 w-25">{{ portfolio_totals[key]['Total invested']| round(precision=2) }} reais</span></li>
+                                <li class="list-group-item">Total atual <span class="badge bg-secondary position-absolute end-0 me-2 w-25">{{ portfolio_totals[key]['Current total'] | round(precision=2) }} reais</span></li>
+                                {% if portfolio_totals[key]['Current total'] - portfolio_totals[key]['Total invested'] >= 0 %}
+                                <li class="list-group-item">Resultado <span class="badge bg-success position-absolute end-0 me-2 w-25">{{ (portfolio_totals[key]['Current total'] - portfolio_totals[key]['Total invested']) | round(precision=2)  }} reais</span></li>
+                                {% else %}
+                                <li class="list-group-item">Resultado <span class="badge bg-danger position-absolute end-0 me-2 w-25">{{ (portfolio_totals[key]['Current total'] - portfolio_totals[key]['Total invested']) | round(precision=2) }} reais</span></li>
+                                {% endif %}
+                            </ul>
+                          </div>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

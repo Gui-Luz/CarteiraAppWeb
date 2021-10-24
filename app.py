@@ -6,11 +6,13 @@ import requests
 config_file = configparser.ConfigParser()
 config_file.read('config.ini')
 
+# Endpoints
 HOST = config_file['ENDPOINTS']['host']
 USER_ENDPOINT = config_file['ENDPOINTS']['user']
 AUTH_ENDPOINT = config_file['ENDPOINTS']['auth_user']
 PORTFOLIO_ENDPOINT = config_file['ENDPOINTS']['portfolios']
 OPEN_OPERATION = config_file['ENDPOINTS']['open_operations']
+RECORDS = config_file['ENDPOINTS']['records']
 
 DEBUG = config_file['ENV']['debug']
 
@@ -41,7 +43,7 @@ def portfolio():
                                    portfolio_totals=portfolio_totals)
         else:
             if r['Message'] == 'Portfolio not found':
-                nav = ['active', '', session['username'], '/logout', 'LOGOUT']
+                nav = ['active', 'disabled', session['username'], '/logout', 'LOGOUT']
                 return render_template('new_portfolio.html', nome_do_app=app_name, nav=nav)
             else:
                 return f"{r['Message']}"
@@ -53,7 +55,12 @@ def portfolio():
 @app.route('/history')
 def history():
     if jwt_check():
-        return f"Bem vindo ao histórico {session['username']}, {session['jwt']}"
+        r_url = f"http://{HOST}{RECORDS}?user_id={session['user_id']}"
+        r = requests.get(r_url).json()
+        if r['Code'] == 200:
+            stocks = r['Data']['Stocks']
+            nav = ['', 'active', session['username'], '/logout', 'LOGOUT']
+            return render_template('records.html', nome_do_app=app_name, nav=nav, stocks=stocks)
     else:
         nav = ['disabled', 'disabled', '', '/', 'LOGIN']
         return render_template('login.html', nome_do_app=app_name, nav=nav)
