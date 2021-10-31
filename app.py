@@ -1,10 +1,13 @@
+import os
 from flask import Flask, render_template, url_for, session, redirect, request, flash
 import configparser
 from core.core import jwt_check
 import requests
 
 config_file = configparser.ConfigParser()
-config_file.read('config.ini')
+#config_file.read('config.ini')
+config_file.read(os.path.dirname(__file__) + '/config.ini')
+
 
 # Endpoints
 HOST = config_file['ENDPOINTS']['host']
@@ -59,8 +62,9 @@ def history():
         r = requests.get(r_url).json()
         if r['Code'] == 200:
             stocks = r['Data']['Stocks']
+            totals = r['Data']['Totals']
             nav = ['', 'active', session['username'], '/logout', 'LOGOUT']
-            return render_template('records.html', nome_do_app=app_name, nav=nav, stocks=stocks)
+            return render_template('records.html', nome_do_app=app_name, nav=nav, stocks=stocks, totals=totals)
     else:
         nav = ['disabled', 'disabled', '', '/', 'LOGIN']
         return render_template('login.html', nome_do_app=app_name, nav=nav)

@@ -44,8 +44,7 @@
                                         <th class="text-center">Preço de compra</th>
                                         <th class="text-center">Data de venda</th>
                                         <th class="text-center">Preço de venda</th>
-                                        <th class="text-center">Resultado</th>
-                                        <th class="text-center">Status</th>
+                                        <th class="text-center">Resultado <span class="badge bg-success">{{ totals[key] }}</span> </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -70,7 +69,6 @@
                                         {% else %}
                                             <td class="text-center align-middle text-danger"> {{ row['Result'] | round(precision=2) }}</td>
                                         {% endif %}
-                                        <td class="text-center align-middle"> {{ row['Status'] }}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
