@@ -87,6 +87,8 @@ def authenticate():
         session['jwt'] = r['Data']['Jwt']
         session['username'] = r['Data']['Username']
         session['user_id'] = r['Data']['Id']
+        session['name'] = r['Data']['Name']
+        session['email'] = r['Data']['Email']
         return redirect(url_for('portfolio'))
     else:
         flash(f'Usuário não encontrado.', 'danger')
@@ -99,7 +101,7 @@ def sign_up():
     signup_user_name = request.form['user_name']
     signup_password = request.form['password']
     signup_email = request.form['email']
-    r_url = f'http://{HOST}{USER_ENDPOINT}?username={signup_user_name}&email={signup_email}&password={signup_password}'
+    r_url = f'http://{HOST}{USER_ENDPOINT}?name={signup_name}&username={signup_user_name}&email={signup_email}&password={signup_password}'
     r = requests.post(r_url).json()
     if r['Code'] == 200:
         flash(f'Usuário cadastrado com sucesso.', 'success')
