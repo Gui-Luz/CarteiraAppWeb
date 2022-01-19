@@ -37,7 +37,7 @@ RUN rm -rf /var/www/CarteiraAppWeb/Dockerfile
 RUN rm -rf /var/www/CarteiraAppWeb/requirements.txt
 
 RUN service apache2 start
-RUN source /etc/apache2/envvars
+#RUN source /etc/apache2/envvars
 RUN sleep 10
 RUN chown -R bflaskappuser:www-data /var/www/CarteiraAppWeb
 RUN service apache2 stop
