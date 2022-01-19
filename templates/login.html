@@ -1,0 +1,45 @@
+   {% extends "template.html" %} {% block conteudo %}
+    <main class="container p-2 mt-5 fonte-especial">
+        <section class="container">
+            <h1 class="text-center">{{nome_do_app}}</h1>
+            <h4 class="text-center">Sua carteira de ações organizada</h4>
+        </section>
+        <section class="container p-2">
+            <div class="row justify-content-center mt-5">
+                <section class="card bg-light m-1 p-4 col-md-5 col-12">
+                    <h3 class="card-title">LOGIN</h3>
+                    <form method="POST" action="{{ url_for('authenticate') }}">
+                        <p><label>Nome de usuário:</label> <input class="form-control" type="text" name="username" required></p>
+                        <p><label>Senha:</label> <input class="form-control" type="password" name="password" required></p>
+                        <p><button class="btn btn-primary" type="submit">Entrar</button>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cadastrar">
+                          Cadastre-se
+                        </button></p>
+                    </form>
+                </section>
+            </div>
+        </section>
+        <!-- Modal -->
+        <div class="modal fade" id="cadastrar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cadastre-se</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form method="POST" action="{{ url_for('sign_up') }}">
+                    <p><label>Nome:</label> <input class="form-control" type="text" name="name" required></p>
+                    <p><label>Login:</label> <input class="form-control" type="text" name="user_name" required></p>
+                    <p><label>Senha:</label> <input class="form-control" type="password" name="password" required></p>
+                    <p><label>E-mail:</label> <input class="form-control" type="email" name="email" required></p>
+                    <div class="modal-footer">
+                        <p><button class="btn btn-primary" type="submit">Cadastrar</button></p>
+                    </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+    </main>
+    {% endblock %}

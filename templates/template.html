@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{nome_do_app}}</title>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+            rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+            crossorigin="anonymous">
+      <link rel="stylesheet" type="text/css" href="static/styles.css">
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+      <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+  </head>
+  <body id="wrapper">
+    <header class="header">
+    <!-- Mensagens -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert-{{category}} alert-dismissible fade show" role="alert">
+        <p class="fs-5 p-1 text-center mb-0">
+        {{message}}
+        </p>
+      </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <!-- NAVBAR LOGIN-->
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-square-half m-1 pb-1" viewBox="0 0 16 16">
+            <path d="M8 15V1h6a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H8zm6 1a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12z"/>
+            </svg>{{nome_do_app}}</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link {{nav[0]}}" href="{{url_for('portfolio')}}" tabindex="-1" aria-disabled="true">Portfólio</a>
+              </li>
+                <li class="nav-item">
+                <a class="nav-link {{nav[1]}}" href="{{url_for('history')}}" tabindex="-1" aria-disabled="true">Histórico</a>
+              </li>
+            </ul>
+              <span class="navbar-text">{{ nav[2] }}
+              </span>
+              <span class="navbar-text">
+                  <a class="nav-link" href="{{nav[3]}}">{{nav[4]}}</a>
+              </span>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main class="container-fluid main-content">
+    {% block conteudo %} {% endblock %}
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+      crossorigin="anonymous"></script>
+  </body>
+</html>
