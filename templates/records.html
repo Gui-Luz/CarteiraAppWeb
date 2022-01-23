@@ -42,9 +42,9 @@
                                         <th class="text-center">Data de venda</th>
                                         <th class="text-center">Preço de venda</th>
                                         {% if totals[key] >= 0 %}
-                                        <th class="text-center d-block">Resultado <span class="badge bg-success d-block">{{ totals[key] }}</span> </th>
+                                        <th class="text-center d-block">Resultado <span class="badge bg-success d-block">{{ totals[key] | round(precision=2) }}</span> </th>
                                         {% else %}
-                                        <th class="text-center">Resultado <span class="badge bg-danger">{{ totals[key] }}</span> </th>
+                                        <th class="text-center">Resultado <span class="badge bg-danger">{{ totals[key] | round(precision=2) }}</span> </th>
                                         {% endif %}
                                     </tr>
                                 </thead>
@@ -71,6 +71,51 @@
                                             <td class="text-center align-middle text-danger"> {{ row['Result'] | round(precision=2) }}</td>
                                         {% endif %}
                                     </tr>
+                                    <!-- Modal -->
+                                        <div class="modal-dialog">
+                                            <div class="modal fade" id="_{{ row['Stock'] }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                              <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                  <div class="modal-header bg-light">
+                                                    <h5 class="modal-title" id="ModalLabelsellstock">Editar ações</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                      <div class="card mb-2">
+                                                          {% if row['Status'] == 'Closed' %}
+                                                          <div class="card-body">
+                                                            <form method="POST" action="{{ url_for('update_stocks') }}?stock={{row['Stock']}}&quantity={{ row['Quantity'] }}&price={{ row['Price'] }}&date={{ row['Date'] }}&sold_price={{ row['Sold price'] }}&sold_date={{ row['Sold date'] }}&portfolio={{ key }}&status={{ row['Status'] }}&id_list={{ row['Id list'] }}">
+                                                                <h5 class="card-title">Detalhes</h5>
+                                                                <p class="m-0 fs-1" name="stock">{{row['Stock'] }}</p>
+                                                                <p class="m-0"><label class="gerenciar-label">quantidade</label> <input class="form-control form-control-sm" value="{{ row['Quantity'] }}" type="text" name="quantity" required></p>
+                                                                <p class="m-0"><label class="gerenciar-label">preço da compra</label> <input class="form-control form-control-sm" value="{{ row['Price'] }}"  type="text" name="price" required></p>
+                                                                <p class="m-0"><label class="gerenciar-label">data da compra</label> <input class="form-control form-control-sm" value="{{ row['Date'] }}"  type="text" name="date" required></p>
+                                                                <p class="m-0"><label class="gerenciar-label">preço da venda</label> <input class="form-control form-control-sm" value="{{ row['Sold price'] }}"  type="text" name="sold_price" required></p>
+                                                                <p class="m-0"><label class="gerenciar-label">data da venda</label> <input class="form-control form-control-sm" value="{{ row['Sold date'] }}"  type="text" name="sold_date" required></p>
+                                                                <p class="m-0"><label class="gerenciar-label">carteira</label> <input class="form-control form-control-sm" value="{{ key }}"  type="text" name="portfolio" required></p>
+                                                                <button type="submit" class="btn btn-primary m-1">Editar</button>
+                                                            </form>
+                                                          </div>
+                                                          {% else %}
+                                                          <div class="card-body">
+                                                            <form method="POST" action="{{ url_for('update_stocks') }}?stock={{row['Stock']}}&quantity={{ row['Quantity'] }}&price={{ row['Price'] }}&date={{ row['Date'] }}&portfolio={{ key }}&status={{ row['Status'] }}&id_list={{ row['Id list'] }}">
+                                                                <h5 class="card-title">Detalhes</h5>
+                                                                <p class="m-0 fs-1" name="stock">{{row['Stock'] }}</p>
+                                                                <p class="m-0"><label class="gerenciar-label">quantidade</label> <input class="form-control form-control-sm" value="{{ row['Quantity'] }}" type="text" name="quantity" required></p>
+                                                                <p class="m-0"><label class="gerenciar-label">preço da compra</label> <input class="form-control form-control-sm" value="{{ row['Price'] }}"  type="text" name="price" required></p>
+                                                                <p class="m-0"><label class="gerenciar-label">data da compra</label> <input class="form-control form-control-sm" value="{{ row['Date'] }}"  type="text" name="date" required></p>
+                                                                <p class="m-0"><label class="gerenciar-label">carteira</label> <input class="form-control form-control-sm" value="{{ key }}"  type="text" name="portfolio" required></p>
+                                                                <button type="submit" class="btn btn-primary m-1">Editar</button>
+                                                            </form>
+                                                          </div>
+                                                          {% endif %}
+                                                      </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                        </div>
+                                    <!-- Modal -->
                                 {% endfor %}
                                 </tbody>
                             </table>

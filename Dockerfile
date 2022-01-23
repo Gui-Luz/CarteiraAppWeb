@@ -4,7 +4,6 @@ FROM ubuntu:18.04
 RUN apt-get update -y ; apt-get upgrade -y
 RUN apt-get install -y apache2 --no-install-recommends; apt-get install -y libapache2-mod-wsgi-py3 --no-install-recommends
 RUN a2enmod wsgi
-RUN a2enmod lbmethod_byrequests
 
 RUN mkdir /var/www/CarteiraAppWeb
 COPY . /var/www/CarteiraAppWeb
@@ -37,7 +36,6 @@ RUN rm -rf /var/www/CarteiraAppWeb/Dockerfile
 RUN rm -rf /var/www/CarteiraAppWeb/requirements.txt
 
 RUN service apache2 start
-#RUN source /etc/apache2/envvars
 RUN sleep 10
 RUN chown -R bflaskappuser:www-data /var/www/CarteiraAppWeb
 RUN service apache2 stop

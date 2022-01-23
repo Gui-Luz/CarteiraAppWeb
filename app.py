@@ -146,6 +146,39 @@ def sell_stocks():
         return redirect(url_for('index'))
 
 
+@app.route('/update_stocks', methods=['POST'])
+def update_stocks():
+    if request.args['status'] == 'Closed':
+        id_list = request.args['id_list']
+        stock = request.args['stock']
+        quantity = int(request.form['quantity'])
+        price = float(request.form['price'].replace(',', '.'))
+        date = (request.form['date'].replace('/', '-'))
+        sold_price = float(request.form['sold_price'].replace(',', '.'))
+        sold_date = (request.form['sold_date'].replace('/', '-'))
+        portfolio = request.args['portfolio']
+        return id_list
+
+        # r_url = f"http://{HOST}{CLOSED_STOCKS}?user_id={session['user_id']}&stock={stock}&quantity={quantity}&price={price}&date={date}&sold_price={sold_price}&sold_date={sold_date}&portfolio={portfolio} "
+        # r = requests.put(r_url).json()
+        # if r['Code'] == 200:
+        #     flash(f'Ação editada com sucesso.', 'success')
+        #     return redirect(url_for('index'))
+        # else:
+        #     flash(f"{r['Message']}.", 'danger')
+        #     return redirect(url_for('index'))
+
+    elif request.args['status'] == 'Open':
+        id_list = request.args['id_list']
+        stock = request.args['stock']
+        quantity = int(request.form['quantity'])
+        price = float(request.form['price'].replace(',', '.'))
+        date = (request.form['date'].replace('/', '-'))
+        portfolio = request.args['portfolio']
+        return id_list
+
+
+
 if __name__ == '__main__':
     app.run(debug=bool(DEBUG), port=8000)
 
