@@ -3,11 +3,10 @@ from flask import Flask, render_template, url_for, session, redirect, request, f
 import configparser
 from core.core import jwt_check
 import requests
+import ast
 
 config_file = configparser.ConfigParser()
-#config_file.read('config.ini')
 config_file.read(os.path.dirname(__file__) + '/config.ini')
-
 
 # Endpoints
 HOST = config_file['ENDPOINTS']['host']
@@ -16,6 +15,7 @@ AUTH_ENDPOINT = config_file['ENDPOINTS']['auth_user']
 PORTFOLIO_ENDPOINT = config_file['ENDPOINTS']['portfolios']
 OPEN_OPERATION = config_file['ENDPOINTS']['open_operations']
 RECORDS = config_file['ENDPOINTS']['records']
+UPDATE_OPEN_STOCK = config_file['ENDPOINTS']['update_open_stock']
 
 DEBUG = config_file['ENV']['debug']
 
@@ -73,7 +73,7 @@ def history():
 @app.route('/logout')
 def logout():
     session['username'] = None
-    session['jwt'] =None
+    session['jwt'] = None
     return redirect(url_for('index'))
 
 
@@ -111,10 +111,10 @@ def sign_up():
         return redirect(url_for('index'))
 
 
-@app.route('/add_stocks', methods=['POST',])
+@app.route('/add_stocks', methods=['POST', ])
 def add_stocks():
     stock = str(request.form['stock'].upper())
-    price = float(request.form['price'].replace(',','.'))
+    price = float(request.form['price'].replace(',', '.'))
     quantity = int(request.form['quantity'])
     date = (request.form['date'].replace('/', '-'))
     portfolio = str(request.form['portfolio'])
@@ -128,7 +128,7 @@ def add_stocks():
         return redirect(url_for('index'))
 
 
-@app.route('/sell_stocks', methods=['POST',])
+@app.route('/sell_stocks', methods=['POST', ])
 def sell_stocks():
     stock = request.args['stock']
     portfolio = request.args['portfolio']
@@ -159,7 +159,7 @@ def update_stocks():
         portfolio = request.args['portfolio']
         return id_list
 
-        # r_url = f"http://{HOST}{CLOSED_STOCKS}?user_id={session['user_id']}&stock={stock}&quantity={quantity}&price={price}&date={date}&sold_price={sold_price}&sold_date={sold_date}&portfolio={portfolio} "
+        # r_url = f"http://{HOST}{CLOSED_STOCKS}?user_id={session['user_id']}&stock={stock}&price={price}&date={date}&sold_price={sold_price}&sold_date={sold_date}&portfolio={portfolio} "
         # r = requests.put(r_url).json()
         # if r['Code'] == 200:
         #     flash(f'Ação editada com sucesso.', 'success')
@@ -174,11 +174,17 @@ def update_stocks():
         quantity = int(request.form['quantity'])
         price = float(request.form['price'].replace(',', '.'))
         date = (request.form['date'].replace('/', '-'))
-        portfolio = request.args['portfolio']
-        return id_list
+        portfolio = request.form['portfolio']
+        r_url = f"http://{HOST}{UPDATE_OPEN_STOCK}?user_id={session['user_id']}&stock={stock}&price={price}&date={date}&portfolio={portfolio}&id_list={id_list}"
+        r = requests.put(r_url).json()
+        if r['Code'] == 200:
+            flash(f'Ação editada com sucesso.', 'success')
+            return redirect(url_for('index'))
+        else:
+            flash(f"Houve erro na edição.", 'danger')
+            return redirect(url_for('index'))
 
 
 
 if __name__ == '__main__':
     app.run(debug=bool(DEBUG), port=8000)
-

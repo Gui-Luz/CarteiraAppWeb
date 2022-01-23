@@ -53,11 +53,11 @@
                                     <tr>
                                         {% if row['Status'] == 'Open' %}
                                         <td>
-                                            <button class="btn btn-primary btn-sm w-100" data-bs-toggle="modal" data-bs-target="#_{{ row['Stock'] }}" value="{{ row['Stock'] }}">{{ row['Stock'] }}</button>
+                                            <button class="btn btn-primary btn-sm w-100" data-bs-toggle="modal" data-bs-target="#_{{ row['Id list'][0] }}" value="{{ row['Stock'] }}">{{ row['Stock'] }}</button>
                                         </td>
                                         {% else %}
                                         <td>
-                                            <button class="btn btn-dark btn-sm w-100" data-bs-toggle="modal" data-bs-target="#_{{ row['Stock'] }}" value="{{ row['Stock'] }}">{{ row['Stock'] }}</button>
+                                            <button class="btn btn-dark btn-sm w-100" data-bs-toggle="modal" data-bs-target="#_{{ row['Id list'][0] }}" value="{{ row['Stock'] }}">{{ row['Stock'] }}</button>
                                         </td>
                                         {% endif %}
                                         <td class="text-center align-middle"> {{ row['Quantity'] }}</td>
@@ -73,7 +73,7 @@
                                     </tr>
                                     <!-- Modal -->
                                         <div class="modal-dialog">
-                                            <div class="modal fade" id="_{{ row['Stock'] }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal fade" id="_{{ row['Id list'][0] }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                               <div class="modal-dialog">
                                                 <div class="modal-content">
                                                   <div class="modal-header bg-light">
