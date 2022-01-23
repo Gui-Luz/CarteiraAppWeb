@@ -16,6 +16,7 @@ PORTFOLIO_ENDPOINT = config_file['ENDPOINTS']['portfolios']
 OPEN_OPERATION = config_file['ENDPOINTS']['open_operations']
 RECORDS = config_file['ENDPOINTS']['records']
 UPDATE_OPEN_STOCK = config_file['ENDPOINTS']['update_open_stock']
+UPDATE_CLOSED_STOCK = config_file['ENDPOINTS']['update_closed_stock']
 
 DEBUG = config_file['ENV']['debug']
 
@@ -156,17 +157,16 @@ def update_stocks():
         date = (request.form['date'].replace('/', '-'))
         sold_price = float(request.form['sold_price'].replace(',', '.'))
         sold_date = (request.form['sold_date'].replace('/', '-'))
-        portfolio = request.args['portfolio']
-        return id_list
-
-        # r_url = f"http://{HOST}{CLOSED_STOCKS}?user_id={session['user_id']}&stock={stock}&price={price}&date={date}&sold_price={sold_price}&sold_date={sold_date}&portfolio={portfolio} "
-        # r = requests.put(r_url).json()
-        # if r['Code'] == 200:
-        #     flash(f'Ação editada com sucesso.', 'success')
-        #     return redirect(url_for('index'))
-        # else:
-        #     flash(f"{r['Message']}.", 'danger')
-        #     return redirect(url_for('index'))
+        portfolio = request.form['portfolio']
+        print(portfolio)
+        r_url = f"http://{HOST}{UPDATE_CLOSED_STOCK}?user_id={session['user_id']}&stock={stock}&price={price}&date={date}&sold_price={sold_price}&sold_date={sold_date}&portfolio={portfolio}&id_list={id_list}"
+        r = requests.put(r_url).json()
+        if r['Code'] == 200:
+            flash(f'Ação editada com sucesso.', 'success')
+            return redirect(url_for('index'))
+        else:
+            flash(f"{r['Message']}.", 'danger')
+            return redirect(url_for('index'))
 
     elif request.args['status'] == 'Open':
         id_list = request.args['id_list']
